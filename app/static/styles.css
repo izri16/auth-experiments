@@ -1,0 +1,16 @@
+html, body, form {
+  width: 100%;
+  height: 100%;
+  background: #20323F;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.msg {
+  color: #DA516D;
+  text-align: center;
+  padding-top: 100px;
+}

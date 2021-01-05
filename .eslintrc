@@ -1,0 +1,29 @@
+{
+  "env": {
+    "es6": true,
+    "node": true,
+    "browser": true
+  },
+  "globals": {"Cookies": "readonly"},
+  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+  "parserOptions": {
+    "ecmaVersion": 12
+  },
+  "rules": {
+    "indent": 0,
+  "linebreak-style": [
+    "error",
+    "unix"
+  ],
+  "no-unused-vars": 1,
+  "no-unreachable": 1,
+  "prettier/prettier": [
+    "error",
+    {
+      "singleQuote": true,
+      "semi": false,
+      "bracketSpacing": false
+    }
+  ]
+  }
+}

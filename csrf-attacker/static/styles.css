@@ -1,0 +1,46 @@
+html, body, form {
+  width: 100%;
+  height: 100%;
+  background: #20323F;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+@keyframes changecolor {
+  from {
+    background: #20323F;
+  }
+
+  to {
+    background: black;
+  }
+}
+
+form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+input {
+  height: 200px;
+  width: 700px;
+  background: black;
+  color: #DA516D;
+  font-size: 50px;
+
+  animation-duration: 1.5s;
+  animation-name: changecolor;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  cursor: pointer;
+}
+
+.harm-msg {
+  color: #DA516D;
+  text-align: center;
+  padding-top: 100px;
+}
