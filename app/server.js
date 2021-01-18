@@ -2,9 +2,9 @@ const express = require('express')
 const path = require('path')
 const session = require('express-session')
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 
-/* const cookie = require('cookie')
-const cors = require('cors')
+/* const cors = require('cors')
 const crypto = require('crypto') */
 
 const app = express()
@@ -15,15 +15,23 @@ const port = 3000
 // 2. All CORS enabled
 /* app.use(cors()) */
 
-// 3. Specific domain enable
+// 3. Specific cors
+// https://www.npmjs.com/package/cors
 /* app.use(
   cors({
+    // Access-Control-Allow-Origin
     origin: 'http://localhost:3002',
+
+    // Those options have effect only when "preflight" is fired
+    // Access-Control-Allow-Credentials
     credentials: true,
+    // Access-Control-Allow-Methods
+    // methods: [],
   })
 ) */
 
 app.use(bodyParser.json())
+app.use(cookieParser())
 
 /* const requireJson = (req, res, next) => {
   if (!req.is('application/json')) {
@@ -40,20 +48,16 @@ app.use(express.static(__dirname + '/static'))
 app.use(
   session({
     secret: 'load-me-from-ENV',
-    cookie: {httpOnly: true},
-    secure: false, // Set to "true" in production!
+    cookie: {httpOnly: true, sameSite: 'strict', secure: false},
   })
 )
 
 app.post('/login', (req, res) => {
   // Set CSRF token
   /* const csrfToken = crypto.randomBytes(20).toString('hex')
-  res.setHeader(
-    'Set-Cookie',
-    cookie.serialize('csrfToken', csrfToken, {
-      maxAge: 60 * 60 * 24 * 7, // 1 week
-    })
-  )
+  res.cookie('csrfToken', csrfToken, {
+    maxAge: 60 * 60 * 24 * 7, // 1 week,
+  })
   req.session.csrfToken = csrfToken */
 
   req.session.userId = 1
@@ -77,9 +81,8 @@ app.get('/data', (req, res) => {
 })
 
 // Note: you should not design the endpoint like that :)
-// TODO: showcase with DELETE
 app.post('/deleteAccount', (req, res) => {
-  console.log('Reached: POST/deleteAccount')
+  console.log('Reached: POST/deleteAccount', req.cookies)
 
   if (req.session.userId === 1) {
     // Check CSRF token
