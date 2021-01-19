@@ -7,9 +7,9 @@
     credentials: 'include',
 
     // All "application/json" requests, even GET are blocked by preflight request policy
-    /* headers: {
-    'Content-Type': 'application/json'
-    }, */
+    // headers: {
+    // 'Content-Type': 'application/json'
+    // },
   })
 
   console.log('response', response)

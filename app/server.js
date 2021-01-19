@@ -4,8 +4,8 @@ const session = require('express-session')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 
-/* const cors = require('cors')
-const crypto = require('crypto') */
+// const cors = require('cors')
+// const crypto = require('crypto')
 
 const app = express()
 const port = 3000
@@ -13,35 +13,35 @@ const port = 3000
 // 1. Default, CORS is disabled
 
 // 2. All CORS enabled
-/* app.use(cors()) */
+// app.use(cors())
 
 // 3. Specific cors
 // https://www.npmjs.com/package/cors
-/* app.use(
-  cors({
-    // Access-Control-Allow-Origin
-    origin: 'http://localhost:3002',
+// app.use(
+//   cors({
+//     // Access-Control-Allow-Origin
+//     origin: 'http://localhost:3002',
 
-    // Those options have effect only when "preflight" is fired
-    // Access-Control-Allow-Credentials
-    credentials: true,
-    // Access-Control-Allow-Methods
-    // methods: [],
-  })
-) */
+//     // Those options have effect only when "preflight" is fired
+//     // Access-Control-Allow-Credentials
+//     credentials: true,
+//     // Access-Control-Allow-Methods
+//     // methods: [],
+//   })
+// )
 
 app.use(bodyParser.json())
 app.use(cookieParser())
 
-/* const requireJson = (req, res, next) => {
-  if (!req.is('application/json')) {
-    console.log('Not a JSON request!')
-    res.status(400)
-    res.send('Requires application/json')
-  } else {
-    next()
-  }
-} */
+// const requireJson = (req, res, next) => {
+//   if (!req.is('application/json')) {
+//     console.log('Not a JSON request!')
+//     res.status(400)
+//     res.send('Requires application/json')
+//   } else {
+//     next()
+//   }
+// }
 
 app.use(express.static(__dirname + '/static'))
 
@@ -57,11 +57,9 @@ app.use(
 
 app.post('/login', (req, res) => {
   // Set CSRF token
-  /* const csrfToken = crypto.randomBytes(20).toString('hex')
-  res.cookie('csrfToken', csrfToken, {
-    maxAge: 60 * 60 * 24 * 7, // 1 week,
-  })
-  req.session.csrfToken = csrfToken */
+  // const csrfToken = crypto.randomBytes(20).toString('hex')
+  // res.cookie('csrfToken', csrfToken)
+  // req.session.csrfToken = csrfToken
 
   req.session.userId = 1
   res.end()
@@ -72,10 +70,10 @@ app.get('/data', (req, res) => {
 
   if (req.session.userId === 1) {
     // Check CSRF token
-    /* if (req.session.csrfToken !== req.headers['csrf-token']) {
-      console.log('CSRF protection worked')
-      return res.sendStatus(403)
-    } */
+    // if (req.session.csrfToken !== req.headers['csrf-token']) {
+    //   console.log('CSRF protection worked')
+    //   return res.sendStatus(403)
+    // }
 
     console.log('Sending secret data!')
     return res.json({data: 'Secret data!'})
