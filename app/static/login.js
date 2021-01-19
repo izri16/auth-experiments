@@ -8,9 +8,9 @@
     await fetch('http://localhost:3000/data', {
       method: 'GET',
       credentials: 'same-origin',
-      headers: {
+      /*headers: {
         'csrf-token': Cookies.get('csrfToken'),
-      },
+      },*/
     })
   ).json()
 

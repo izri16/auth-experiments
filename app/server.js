@@ -45,10 +45,13 @@ app.use(cookieParser())
 
 app.use(express.static(__dirname + '/static'))
 
+// Uses cookie-based authentication
 app.use(
   session({
     secret: 'load-me-from-ENV',
-    cookie: {httpOnly: true, sameSite: 'strict', secure: false},
+    saveUninitialized: false,
+    resave: false,
+    cookie: {httpOnly: true, secure: false},
   })
 )
 
@@ -65,7 +68,7 @@ app.post('/login', (req, res) => {
 })
 
 app.get('/data', (req, res) => {
-  console.log('Reached: GET/data')
+  console.log('Reached: GET/data', req.cookies)
 
   if (req.session.userId === 1) {
     // Check CSRF token
@@ -81,20 +84,20 @@ app.get('/data', (req, res) => {
 })
 
 // Note: you should not design the endpoint like that :)
-app.post('/deleteAccount', (req, res) => {
+/* app.post('/deleteAccount', (req, res) => {
   console.log('Reached: POST/deleteAccount', req.cookies)
 
   if (req.session.userId === 1) {
     // Check CSRF token
-    /* if (req.session.csrfToken !== req.headers['csrf-token']) {
-      console.log('CSRF protection worked')
-      return res.sendStatus(403)
-    } */
+    // if (req.session.csrfToken !== req.headers['csrf-token']) {
+    //  console.log('CSRF protection worked')
+    //  return res.sendStatus(403)
+    // }
     console.log('Deleted account!')
     return res.json({})
   }
   return res.sendStatus(403)
-})
+}) */
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '/static/index.html'))
