@@ -3,6 +3,7 @@ const path = require('path')
 const session = require('express-session')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
+// const multer = require('multer')
 
 // const cors = require('cors')
 // const crypto = require('crypto')
@@ -31,6 +32,7 @@ const port = 3000
 // )
 
 app.use(bodyParser.json())
+// app.use(bodyParser.urlencoded({extended: false}))
 app.use(cookieParser())
 
 // const requireJson = (req, res, next) => {
@@ -38,6 +40,16 @@ app.use(cookieParser())
 //     console.log('Not a JSON request!')
 //     res.status(400)
 //     res.send('Requires application/json')
+//   } else {
+//     next()
+//   }
+// }
+
+// const requireCsrfHeader = (req, res, next) => {
+//   if (!req.headers['x-csrf']) {
+//     console.log('Not a x-csrf header!')
+//     res.status(400)
+//     res.send('Requires x-csrf header')
 //   } else {
 //     next()
 //   }
@@ -81,6 +93,22 @@ app.get('/data', (req, res) => {
   return res.sendStatus(403)
 })
 
+/* app.post('/sendMoney', (req, res) => {
+  console.log('Reached: POST/sendMoney', req.cookies)
+
+  if (req.session.userId === 1) {
+    // Check CSRF token
+    // if (req.session.csrfToken !== req.body.csrfToken) {
+    //   console.log('CSRF protection worked')
+    //   return res.sendStatus(403)
+    // }
+
+    console.log('Money sent!')
+    return res.json('Money sent successfully')
+  }
+  return res.sendStatus(403)
+}) */
+
 // Note: you should not design the endpoint like that :)
 /* app.post('/deleteAccount', (req, res) => {
   console.log('Reached: POST/deleteAccount', req.cookies)
@@ -96,6 +124,27 @@ app.get('/data', (req, res) => {
   }
   return res.sendStatus(403)
 }) */
+
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'public')
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, Date.now() + '-' + file.originalname)
+//   },
+// })
+// const upload = multer({storage: storage}).single('file')
+
+// app.post('/file', requireCsrfHeader, (req, res) => {
+//   upload(req, res, (err) => {
+//     if (err instanceof multer.MulterError) {
+//       return res.status(500).json(err)
+//     } else if (err) {
+//       return res.status(500).json(err)
+//     }
+//     return res.status(200).send(req.file)
+//   })
+// })
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '/static/index.html'))
