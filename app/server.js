@@ -4,7 +4,6 @@ const session = require('express-session')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 // const multer = require('multer')
-
 // const cors = require('cors')
 // const crypto = require('crypto')
 
@@ -31,15 +30,15 @@ const port = 3000
 //   })
 // )
 
-app.use(bodyParser.json())
-// app.use(bodyParser.urlencoded({extended: false}))
 app.use(cookieParser())
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: false}))
 
 // const requireJson = (req, res, next) => {
 //   if (!req.is('application/json')) {
 //     console.log('Not a JSON request!')
 //     res.status(400)
-//     res.send('Requires application/json')
+//     res.json('Requires application/json')
 //   } else {
 //     next()
 //   }
@@ -49,7 +48,7 @@ app.use(cookieParser())
 //   if (!req.headers['x-csrf']) {
 //     console.log('Not a x-csrf header!')
 //     res.status(400)
-//     res.send('Requires x-csrf header')
+//     res.json('Requires x-csrf header')
 //   } else {
 //     next()
 //   }
@@ -63,6 +62,7 @@ app.use(
     secret: 'load-me-from-ENV',
     saveUninitialized: false,
     resave: false,
+    // use "secure" true in production
     cookie: {httpOnly: true, secure: false},
   })
 )
@@ -71,7 +71,6 @@ app.post('/login', (req, res) => {
   // Set CSRF token
   // const csrfToken = crypto.randomBytes(20).toString('hex')
   // res.cookie('csrfToken', csrfToken)
-  // req.session.csrfToken = csrfToken
 
   req.session.userId = 1
   res.end()
@@ -82,13 +81,31 @@ app.get('/data', (req, res) => {
 
   if (req.session.userId === 1) {
     // Check CSRF token
-    // if (req.session.csrfToken !== req.headers['csrf-token']) {
+    // if (req.cookies.csrfToken !== req.headers['csrf-token']) {
     //   console.log('CSRF protection worked')
-    //   return res.sendStatus(403)
+    //   res.status(403)
+    //   return res.json('Incorrect CSRF token')
     // }
 
     console.log('Sending secret data!')
     return res.json({data: 'Secret data!'})
+  }
+  return res.sendStatus(403)
+})
+
+// Note: you should not design the endpoint like that :)
+app.post('/deleteAccount', (req, res) => {
+  console.log('Reached: POST/deleteAccount', req.cookies)
+
+  if (req.session.userId === 1) {
+    // Check CSRF token
+    // if (req.cookies.csrfToken !== req.headers['csrf-token']) {
+    //   console.log('CSRF protection worked')
+    //   res.status(403)
+    //   return res.json('Incorrect CSRF token')
+    // }
+    console.log('Deleted account!')
+    return res.json({})
   }
   return res.sendStatus(403)
 })
@@ -98,29 +115,16 @@ app.get('/data', (req, res) => {
 
   if (req.session.userId === 1) {
     // Check CSRF token
-    // if (req.session.csrfToken !== req.body.csrfToken) {
+    // if (req.cookies.csrfToken !== req.body.csrfToken) {
     //   console.log('CSRF protection worked')
-    //   return res.sendStatus(403)
+    //   res.status(403)
+    //   return res.json('Incorrect CSRF token')
     // }
 
     console.log('Money sent!')
-    return res.json('Money sent successfully')
-  }
-  return res.sendStatus(403)
-}) */
-
-// Note: you should not design the endpoint like that :)
-/* app.post('/deleteAccount', (req, res) => {
-  console.log('Reached: POST/deleteAccount', req.cookies)
-
-  if (req.session.userId === 1) {
-    // Check CSRF token
-    // if (req.session.csrfToken !== req.headers['csrf-token']) {
-    //  console.log('CSRF protection worked')
-    //  return res.sendStatus(403)
-    // }
-    console.log('Deleted account!')
-    return res.json({})
+    return res.json(
+      `Money sent successfully: recipient:${req.body.recipient} amount:${req.body.amount}`
+    )
   }
   return res.sendStatus(403)
 }) */
