@@ -30,6 +30,19 @@ const port = 3000
 //   })
 // )
 
+// When you need to allow multiple origins
+// app.use((req, res, next) => {
+//   // this could be some white-list, not it allows ALL origins!!!
+//   res.header('Access-Control-Allow-Origin', req.headers.origin)
+//   res.header('Access-Control-Allow-Credentials', true)
+//   res.header('Access-Control-Allow-Headers', 'Content-Type')
+//   if (req.method === 'OPTIONS') {
+//     res.send(200)
+//     return
+//   }
+//   next()
+// })
+
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
@@ -71,14 +84,12 @@ app.post('/login', (req, res) => {
   // Set CSRF token
   // const csrfToken = crypto.randomBytes(20).toString('hex')
   // res.cookie('csrfToken', csrfToken)
-
+  console.log('Login ...')
   req.session.userId = 1
   res.end()
 })
 
 app.get('/data', (req, res) => {
-  console.log('Reached: GET/data', req.cookies)
-
   if (req.session.userId === 1) {
     // Check CSRF token
     // if (req.cookies.csrfToken !== req.headers['csrf-token']) {
@@ -86,8 +97,6 @@ app.get('/data', (req, res) => {
     //   res.status(403)
     //   return res.json('Incorrect CSRF token')
     // }
-
-    console.log('Sending secret data!')
     return res.json({data: 'Secret data!'})
   }
   return res.sendStatus(403)

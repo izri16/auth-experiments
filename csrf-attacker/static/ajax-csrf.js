@@ -1,14 +1,13 @@
 ;(async () => {
-  const host = 'http://localhost:3000'
   console.log('Trying to introduce some damage ...')
 
-  const response = await fetch(`${host}/deleteAccount`, {
+  const response = await fetch(`http://localhost:3000/deleteAccount`, {
     method: 'POST',
     credentials: 'include',
 
     // All "application/json" requests, even GET are blocked by preflight request policy
     // headers: {
-    // 'Content-Type': 'application/json'
+    //   'Content-Type': 'application/json',
     // },
   })
 
